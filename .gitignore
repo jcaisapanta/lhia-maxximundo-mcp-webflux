@@ -1,0 +1,108 @@
+# ==============================
+#  Java / Spring Boot .gitignore
+# ==============================
+
+# Archivos compilados
+*.class
+*.war
+*.ear
+*.jar
+
+# Directorios de compilación
+/target/
+/build/
+/out/
+
+# IDEs
+### IntelliJ IDEA ###
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+### Eclipse ###
+.project
+.classpath
+.settings/
+bin/
+
+### NetBeans ###
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Sistema operativo
+### macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### Windows ###
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Archivos temporales y logs
+*.log
+*.tmp
+*.bak
+*.swp
+
+# Archivos de configuración locales
+application-local.properties
+application-dev.properties
+application-test.properties
+.env
+*.env
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+!/.mvn/wrapper/maven-wrapper.properties
+
+# Gradle
+.gradle/
+**/build/
+gradle-app.setting
+!gradle-wrapper.jar
+
+# VS Code
+.vscode/
+
+# Archivos de ejecución
+*.pid
+
+# Docker / Contenedores
+**/docker-compose.override.yml
+**/docker-compose.dev.yml
+**/.env
+
+# IntelliJ cache
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+.idea/httpRequests/
+
+# Archivos generados por pruebas
+/test-output/
+/surefire-reports/
+
+# Archivos de cobertura
+*.exec
+*.ec
+coverage/
+jacoco.exec
+
+# Archivos de Sonar y análisis estático
+.sonar/
+.report/
+
+# Archivos de perfiles de usuarios o dependencias locales
+*.local
+*.orig
+
+# Archivos generados por Spring Boot
+spring.log
