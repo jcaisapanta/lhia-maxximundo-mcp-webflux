@@ -33,7 +33,7 @@ public interface MaxximundoTool {
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public record ProductoItem(String codigoProducto, String nombreProducto, Long stock, BigDecimal precio,
 			BigDecimal precioRetail, String grupo, String disenio, String rin, String serie, String ancho,
-			String medida, String familiaRin, String nomenclatura, String velocidad, String urlPagina) {
+			String medida, String familiaRin, String marca, String nomenclatura, String velocidad, String urlPagina) {
 	}
 
 	/** Respuesta paginada de productos mapeando el Page de Spring. */
@@ -73,7 +73,7 @@ public interface MaxximundoTool {
 
 	@JsonIgnoreProperties(ignoreUnknown = true)
 	public record ProductoSinPreciosItem(String codigoProducto, String nombreProducto, String grupo, String disenio,
-			String rin, String serie, String ancho, String medida, String familiaRin, String nomenclatura,
+			String rin, String serie, String ancho, String medida, String familiaRin, String marca, String nomenclatura,
 			String velocidad, String urlPagina) {
 	}
 
