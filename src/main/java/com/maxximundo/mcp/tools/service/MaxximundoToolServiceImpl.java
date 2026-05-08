@@ -80,7 +80,7 @@ public class MaxximundoToolServiceImpl implements MaxximundoTool {
 		HttpStatusCode status = response.getKey();
 		String rawBody = response.getValue();
 
-		System.out.println("MCP META-POINT => callbackId=" + callbackId + " STATUS=" + status + " BODY=" + rawBody);
+		System.out.println("MCP META-POINT => callbackId=" + callbackId + " initialMessage=" + initialMessage + " STATUS=" + status);
 
 		return new UpdateStateResponse(status.toString(), rawBody);
 	}
@@ -90,6 +90,26 @@ public class MaxximundoToolServiceImpl implements MaxximundoTool {
 	@Tool(description = "Realiza la conexión con el canal de atención servicio tecnico o tecni centro.")
 	public UpdateStateResponse updateStateTecniCentro(UpdateStateRequest request) {
 		return postUpdateState(CB_TECNI_CENTRO, request);
+	}
+
+	@Tool(description = "Transfiere al asesor de Tecnicentro cuando el usuario está interesado en comprar un producto. Acepta los campos del producto por separado para garantizar que el asesor recibe toda la información.")
+	public UpdateStateResponse transferirProductoATecniCentro(
+			String nick,
+			String conversationId,
+			String nombreProducto,
+			String medida,
+			String urlPagina,
+			String precio,
+			String tipoCliente) {
+
+		String msg = "Usuario interesado en comprar:\n"
+				+ "Producto: " + (nombreProducto != null ? nombreProducto : "N/A") + "\n"
+				+ "Medida: " + (medida != null ? medida : "N/A") + "\n"
+				+ (precio != null && !precio.isBlank() ? "Precio: $" + precio + "\n" : "")
+				+ "Comprar: " + (urlPagina != null ? urlPagina : "N/A") + "\n"
+				+ "Tipo cliente: " + (tipoCliente != null ? tipoCliente : "Público");
+
+		return postUpdateState(CB_TECNI_CENTRO, new UpdateStateRequest(nick, conversationId, msg));
 	}
 
 	@Tool(description = "Realiza la conexión con el canal de atención MARKETING.")
@@ -182,7 +202,7 @@ public class MaxximundoToolServiceImpl implements MaxximundoTool {
 	}
 
 	@Tool(description = """
-			Valida existencia del cliente por Cédula/RUC y transfiere al canal de TI según estado:
+			Valida existencia del cliente por Cédula/RUC y transfiere al canal de Tecnicentro según estado:
 			- NO EXISTE: transfiere con teléfono=conversationId, nick y mensaje 'Usuario no existe' + cédula/RUC.
 			- ACTUALIZAR DATOS: consulta cartera y transfiere con nombre, teléfono y correo obtenidos + nick y conversationId.
 			- EXISTE: no transfiere.
@@ -226,7 +246,7 @@ public class MaxximundoToolServiceImpl implements MaxximundoTool {
 					Motivo: Usuario no existe
 					""", conversationId, nick, cedulaRuc);
 
-			return updateStateTI(new UpdateStateRequest(nick, conversationId, initialMessage));
+			return updateStateTecniCentro(new UpdateStateRequest(nick, conversationId, initialMessage));
 		}
 
 		// 3) ACTUALIZAR DATOS -> consultar cartera y transferir con info de cartera
@@ -248,7 +268,7 @@ public class MaxximundoToolServiceImpl implements MaxximundoTool {
 						Motivo: Actualización de datos (sin registro de cartera)
 						""", conversationId, nick, cedulaRuc);
 
-				return updateStateTI(new UpdateStateRequest(nick, conversationId, initialMessage));
+				return updateStateTecniCentro(new UpdateStateRequest(nick, conversationId, initialMessage));
 			}
 
 			ClienteItem item = items.get(0);
@@ -274,7 +294,7 @@ public class MaxximundoToolServiceImpl implements MaxximundoTool {
 					Motivo: Actualización de datos
 					""", telefonoCartera, nick, cedulaRuc, nombreCartera, correoCartera);
 
-			return updateStateTI(new UpdateStateRequest(nick, conversationId, initialMessage));
+			return updateStateTecniCentro(new UpdateStateRequest(nick, conversationId, initialMessage));
 		}
 
 		// 4) EXISTE -> no transferir (respuesta normal)
